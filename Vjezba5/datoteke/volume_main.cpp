@@ -13,10 +13,6 @@ class volume
 	bool valid() const { return vol >= 0 && vol <= 100; }
 
 public:
-
-
-	
-	
 	volume(int l) : vol(granice(l)), temp(granice(l)) {}
 
 	volume() : volume(50) {}
