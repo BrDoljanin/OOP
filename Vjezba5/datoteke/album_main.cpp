@@ -73,3 +73,5 @@ Ocekivani ispis:
       2. Superhero
       3. Matador
 */
+
+//veza izmedu Albun i Song je kompozicija jer klasa Album unutar sebe sadrzi podatke klase Song
