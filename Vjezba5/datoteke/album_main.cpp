@@ -4,7 +4,55 @@
 #include <string>
 #include <vector>
 
-// ovdje napisite Song i Album
+struct Song {
+    std::string title;
+    std::string artist;
+    int seconds;
+};
+
+class Album {
+private:
+    std::string title;
+    int year;
+    std::vector<Song> songs;
+
+public:
+
+    Album(std::string t, int y, Song first) : title(t), year(y) {
+        songs.push_back(first);
+    }
+
+    bool add(Song s) {
+        for (const auto& song : songs) {
+            if (song.title == s.title) {
+                return false;
+            }
+        }
+        songs.push_back(s);
+        return true;
+    }
+
+    int duration() const {
+        int total_seconds = 0;
+        for (const auto& song : songs) {
+            total_seconds += song.seconds;
+        }
+        return total_seconds;
+    }
+
+    void print() const {
+        int total_sec = duration();
+        int minutes = total_sec / 60;
+        int seconds = total_sec % 60;
+
+        std::cout << title << " (" << year << "), " << songs.size() << " pjesme, " 
+                  << minutes << ":" << (seconds < 10 ? "0" : "") << seconds << '\n';
+
+        for (size_t i = 0; i < songs.size(); ++i) {
+            std::cout << "  " << (i + 1) << ". " << songs[i].title << '\n';
+        }
+    }
+};
 
 int main()
 {
