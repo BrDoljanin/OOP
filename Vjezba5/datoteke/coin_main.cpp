@@ -3,6 +3,39 @@
 #include <iostream>
 
 // ovdje napisite klasu Coin
+class Coin
+{
+
+    int vr;
+    static int counter;
+
+public:
+
+    Coin(int v) : vr(v)
+    {
+
+        counter++;
+
+    }
+
+    ~Coin()
+    {
+
+        counter--;
+
+    }
+
+    static int remaining()
+    {
+
+        return counter;
+
+    }
+
+};
+
+
+int Coin::counter = 0;
 
 void bonus()               // bonus runda: tri novcica
 {
