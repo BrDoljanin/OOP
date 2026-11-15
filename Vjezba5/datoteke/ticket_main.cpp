@@ -1,9 +1,39 @@
-// Vjezba 5, zadatak 5: napisite klasu Ticket iznad main.
+//// Vjezba 5, zadatak 5: napisite klasu Ticket iznad main.
 
 #include <iostream>
 #include <string>
+using namespace std;
+class Ticket
+{
 
-// ovdje napisite klasu Ticket
+    string ime;
+    int id;
+    static int counter;
+
+public:
+    Ticket(const string& koncert) : ime(koncert)
+    {
+
+        counter++;
+        id = counter;
+
+    }
+    int get_id() const
+    {
+
+        return id;
+
+    }
+    static int issued()
+    {
+
+        return counter;
+
+    }
+};
+
+
+int Ticket::counter = 0;
 
 int main()
 {
@@ -17,9 +47,9 @@ int main()
 }
 
 /*
-Ocekivani ispis:
-
-    0
-    1 2 3
-    3
-*/
+//Ocekivani ispis:
+//
+//    0
+//    1 2 3
+//    3
+//*/
