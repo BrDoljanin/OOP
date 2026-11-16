@@ -2,11 +2,12 @@
 
 #include <string>
 #include "Level.h"
-
+using namespace std;
 class Player {
-    // data memberi
+    string name;
+    Level level;
 
 public:
-    // konstruktor
+    Player(const string& ime);
     void print() const;      // ime i stanje levela u kojem je igrac
 };
