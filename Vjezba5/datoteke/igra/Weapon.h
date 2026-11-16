@@ -1,10 +1,11 @@
 #pragma once      // header se ukljucuje samo jednom, iako ga ukljucuje vise datoteka
 
 #include <string>
-
+using namespace std;
 class Weapon {
-    // data memberi
+    string ime;
 
 public:
-    // konstruktor (deklaracija; definicija je u Weapon.cpp)
+    Weapon(const string& oruzje);
+    string get_name() const;
 };
