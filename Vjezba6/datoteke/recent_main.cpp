@@ -1,100 +1,128 @@
-// Vjezba 6, zadatak 3: napisite klasu LogFile i funkciju log_songs iznad main.
+// Vjezba 6, zadatak 6: napisite klasu RecentlyPlayed iznad main.
 
-#define _CRT_SECURE_NO_WARNINGS    // za Visual Studio: dopusta std::fopen
-#include <cstdio>
+#include <cassert>
 #include <iostream>
 #include <string>
-#include <vector>
 using namespace std;
-// ovdje napisite klasu LogFile i funkciju log_songs
-class LogFile 
+
+// ovdje napisite klasu RecentlyPlayed
+class RecentlyPlayed 
 {
 
-    FILE* fp;
-
+    string* dat;
+    int kapacitet;
+    int broj;
+    int sljedeci;
 
 public:
-    LogFile(const string ime_dat)
+    RecentlyPlayed(int k) : kapacitet(k), broj(0), sljedeci(0)
+    {
+
+        assert(kapacitet > 0);
+        dat = new string[kapacitet];
+    }
+
+    ~RecentlyPlayed() 
     {
     
-        fp = std::fopen(ime_dat.c_str(), "a");
-
+        delete[] dat;
     
     }
 
-
-    ~LogFile() 
+    RecentlyPlayed(const RecentlyPlayed& a) : kapacitet(a.kapacitet), broj(a.broj), sljedeci(a.sljedeci)
     {
-    
-        if(fp)
+
+        dat = new string[kapacitet];
+        for (int i = 0; i < kapacitet; ++i) 
         {
-        
-            fclose(fp);
+
+            dat[i] = a.dat[i];
 
         }
+
     }
 
-    void write(const string& line) 
+    void play(const string& title)
     {
     
-        if(fp)
+        dat[sljedeci] = title;
+        sljedeci = (sljedeci + 1) % kapacitet;
+        if(broj < kapacitet)
         {
         
-            fputs(line.c_str(), fp);
-            fputs("\n", fp);
+            broj++;
         
         }
-       
     
     }
 
-    LogFile(const LogFile&) = delete;
+    int size() const
+    {
     
+        return broj;
+    
+    }
+
+    int capacity() const 
+    {
+    
+        return kapacitet;
+    
+    }
+    string get(int i) const 
+    {
+    
+        int id = (sljedeci - 1 - i + kapacitet) % kapacitet;
+        return dat[id];
+    
+    }
+    void print() const
+    {
+    
+        for(int i = 0; i < broj; i++)
+        {
+        
+            cout << get(i);
+            if(i < broj - 1)
+            {
+            
+                cout << ", ";
+            
+            }
+        
+        }
+        cout << '\n';
+    
+    }
 };
-int log_songs(const vector<string>& titles)
-{
 
-    LogFile file("played.log");
-    int cc = 0;
-
-    for (const auto& n : titles)
-    {
-
-        if (n == "STOP")
-        {
-
-            break;
-
-        }
-        file.write(n);
-        cc++;
-    }
-    return cc;
-
-}
 
 int main()
 {
-    std::remove("played.log");     // brise datoteku iz prethodnog pokretanja
-    int n = log_songs({"Superhero", "Sports", "STOP", "Matador"});
-    std::cout << n << '\n';
-    std::cout << log_songs({"One Rizla"}) << '\n';
+    RecentlyPlayed recent(3);
+    recent.play("Heroes");
+    recent.play("Literary Mind");
+    std::cout << recent.size() << ' ' << recent.capacity() << '\n';
+    recent.play("Sports");
+    recent.print();
+    recent.play("Henry Don't Got Love");     // buffer je pun: prepisuje se najstarija
+    recent.print();
 
-    // ispis sadrzaja datoteke
-    std::FILE* f = std::fopen("played.log", "r");
-    char line[100];
-    while (std::fgets(line, sizeof line, f))
-        std::cout << line;
-    std::fclose(f);
+    RecentlyPlayed copy = recent;             // copy konstruktor
+    recent.play("Guided by Angels");
+    recent.print();
+    copy.print();
+    std::cout << copy.get(0) << '\n';
     return 0;
 }
 
 /*
 Ocekivani ispis:
 
-    2
-    1
-    Superhero
-    Sports
-    One Rizla
+    2 3
+    Sports, Literary Mind, Heroes
+    Henry Don't Got Love, Sports, Literary Mind
+    Guided by Angels, Henry Don't Got Love, Sports
+    Henry Don't Got Love, Sports, Literary Mind
+    Henry Don't Got Love
 */
