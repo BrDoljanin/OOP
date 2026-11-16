@@ -1,128 +1,128 @@
-// Vjezba 6, zadatak 6: napisite klasu RecentlyPlayed iznad main.
+// Vjezba 6, zadatak 5: napisite klase Enemy i Level iznad main.
 
-#include <cassert>
 #include <iostream>
 #include <string>
+#include <vector>
 using namespace std;
-
-// ovdje napisite klasu RecentlyPlayed
-class RecentlyPlayed 
+// ovdje napisite klase Enemy i Level
+class Enemy 
 {
 
-    string* dat;
-    int kapacitet;
-    int broj;
-    int sljedeci;
+    string name;
+    int x;
+    int y;
+    int health;
 
 public:
-    RecentlyPlayed(int k) : kapacitet(k), broj(0), sljedeci(0)
-    {
+    Enemy(string n, int posx, int posy) : name(n), x(posx), y(posy), health(100) {}
 
-        assert(kapacitet > 0);
-        dat = new string[kapacitet];
-    }
+    string get_name() const { return name; }
+    int get_x() const { return x; }
+    int get_y() const { return y; }
+    int get_health() const { return health; }
 
-    ~RecentlyPlayed() 
-    {
-    
-        delete[] dat;
-    
-    }
-
-    RecentlyPlayed(const RecentlyPlayed& a) : kapacitet(a.kapacitet), broj(a.broj), sljedeci(a.sljedeci)
-    {
-
-        dat = new string[kapacitet];
-        for (int i = 0; i < kapacitet; ++i) 
-        {
-
-            dat[i] = a.dat[i];
-
-        }
-
-    }
-
-    void play(const string& title)
+    bool is_alive() const 
     {
     
-        dat[sljedeci] = title;
-        sljedeci = (sljedeci + 1) % kapacitet;
-        if(broj < kapacitet)
-        {
+        return health > 0;
+    
+    }
+
+    void move(int mx, int my)
+    {
         
-            broj++;
-        
-        }
+        x += mx;
+        y += my;
     
     }
-
-    int size() const
+    void take_damage(int dmg)
     {
     
-        return broj;
-    
-    }
-
-    int capacity() const 
-    {
-    
-        return kapacitet;
-    
-    }
-    string get(int i) const 
-    {
-    
-        int id = (sljedeci - 1 - i + kapacitet) % kapacitet;
-        return dat[id];
-    
-    }
-    void print() const
-    {
-    
-        for(int i = 0; i < broj; i++)
+        health -= dmg;
+        if(health < 0)
         {
-        
-            cout << get(i);
-            if(i < broj - 1)
-            {
             
-                cout << ", ";
-            
-            }
+            health = 0;
         
         }
-        cout << '\n';
-    
+
     }
 };
 
+class Level 
+{
 
+    int rows;
+    int cols;
+    vector<Enemy> enemies;
+
+public:
+    Level(int r, int c) : rows(r), cols(c) {}
+
+   
+
+    bool add(Enemy e)
+    {
+    
+        if(e.get_x() < 0 || e.get_x() >= cols || e.get_y() < 0 || e.get_y() >= rows)
+        {
+            
+            return false;
+        
+        }
+        enemies.push_back(e);
+        return true;
+    }
+    void step(int dx, int dy)
+    {
+    
+        for(auto& e: enemies)
+        {
+        
+            int xx = e.get_x() + dx;
+            int yy = e.get_y() + dy;
+        
+            if (xx >= 0 && xx < cols && yy >= 0 && yy < rows)
+            {
+
+                e.move(dx, dy);
+
+            }
+
+        }
+
+    }
+    void print() const 
+    {
+    
+        for(const auto& e : enemies)
+        {
+        
+            std::cout << e.get_name() << " (" << e.get_x() << ", " << e.get_y() << ") " << e.get_health() << '\n';
+        
+        }
+    
+    }
+};
 int main()
 {
-    RecentlyPlayed recent(3);
-    recent.play("Heroes");
-    recent.play("Literary Mind");
-    std::cout << recent.size() << ' ' << recent.capacity() << '\n';
-    recent.play("Sports");
-    recent.print();
-    recent.play("Henry Don't Got Love");     // buffer je pun: prepisuje se najstarija
-    recent.print();
-
-    RecentlyPlayed copy = recent;             // copy konstruktor
-    recent.play("Guided by Angels");
-    recent.print();
-    copy.print();
-    std::cout << copy.get(0) << '\n';
+    Level cave(5, 10);
+    cave.add(Enemy("Gnome", 1, 1));
+    std::cout << cave.add(Enemy("Troll", 8, 3))
+              << cave.add(Enemy("Bat", 12, 2)) << '\n';
+    cave.step(1, 1);
+    cave.print();
+    cave.step(1, 1);
+    cave.print();
     return 0;
 }
 
 /*
 Ocekivani ispis:
 
-    2 3
-    Sports, Literary Mind, Heroes
-    Henry Don't Got Love, Sports, Literary Mind
-    Guided by Angels, Henry Don't Got Love, Sports
-    Henry Don't Got Love, Sports, Literary Mind
-    Henry Don't Got Love
+    10
+    Gnome (2, 2) 100
+    Troll (9, 4) 100
+    Gnome (3, 3) 100
+    Troll (9, 4) 100
 */
