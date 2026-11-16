@@ -1,3 +1,3 @@
 #include "Weapon.h"
 
-// definicija konstruktora: Weapon::Weapon(...) : ... {}
+Weapon::Weapon(const string& oruzje) : ime(oruzje) {};
