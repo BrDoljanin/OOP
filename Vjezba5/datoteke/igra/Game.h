@@ -3,9 +3,11 @@
 #include <string>
 #include "Level.h"
 #include "Player.h"
-
+using namespace std;
 class Game {
-    // data memberi
+    
+    string title;
+    Player igrac;
 
 public:
     Game(const std::string& title, const std::string& player_name);
