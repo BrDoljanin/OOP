@@ -1,3 +1,8 @@
-#include "Enemy.h"
+#pragma once      // header se ukljucuje samo jednom, iako ga ukljucuje vise datoteka
 
-// definicija konstruktora: Enemy::Enemy(...) : ... {}
+class Enemy {
+   
+
+public:
+	Enemy();
+};
