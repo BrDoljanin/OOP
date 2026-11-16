@@ -3,12 +3,15 @@
 #include <vector>
 #include "Enemy.h"
 #include "Weapon.h"
+using namespace std;
 
 class Level {
-    // data memberi
+    
+    vector <Enemy> neprijatelji;
+    vector <Weapon> oruzja;
 
 public:
-    // konstruktor
-    int enemy_count() const;
-    int weapon_count() const;
+    Level();
+    int br_nepr() const;
+    int br_oruz() const;
 };
