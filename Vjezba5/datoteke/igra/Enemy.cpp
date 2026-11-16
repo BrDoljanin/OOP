@@ -1,8 +1,3 @@
-#pragma once      // header se ukljucuje samo jednom, iako ga ukljucuje vise datoteka
+#include "Enemy.h"
 
-class Enemy {
-   
-
-public:
-	Enemy();
-};
+Enemy::Enemy() {}
