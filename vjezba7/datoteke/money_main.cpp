@@ -7,33 +7,85 @@
 using namespace std;
 
 // ovdje napisite klasu Money i operatore
-class Money 
+class Money
 {
 
-	int euri;
-	int centi;
+    int centi;
 
 public:
-	Money(int eur, int cent) : euri(eur), centi(cent){}
+    Money(int eur = 0, int cent = 0) : centi(eur * 100 + cent) {}
 
-	Money& operator+=(const Money& other)
-	{
-	
-		euri += other.euri;
-		centi += other.centi;
+    int koliko() const
+    {
+        
+        return centi;   
+    
+    }
 
-		return *this;
-	
-	}
+    Money& operator+=(const Money& other)
+    {
 
-	ostream& operator<< (ostream& os, const Money& m) 
-	{
-	
-	
-	}
+        centi += other.centi;
+        return *this;
 
+    }
 
+    
 };
+
+Money operator+(Money a, const Money& b)
+{
+    a += b;
+    return a;
+}
+
+bool operator<(const Money& a, const Money& b)
+{
+    return a.koliko() < b.koliko();
+}
+
+ostream& operator<< (ostream& os, const Money& m)
+{
+
+    int c = m.koliko();
+    int eur = c / 100;
+    int cent = c % 100;
+    os << eur << '.';
+    if(cent < 10)
+    {
+    
+        os << '0' << cent << " EUR";
+    
+    }
+    else 
+    {
+    
+        os << cent << " EUR";
+    
+    }
+    return os;
+
+}
+
+istream& operator>>(istream& is, Money& m)
+{
+    int euri = 0; 
+    char sep = '\0';
+    int cents = 0;
+
+    if (!(is >> euri >> sep >> cents)) {
+        return is;
+    }
+
+    if (sep != '.') {
+        is.setstate(ios::failbit); 
+        return is;
+    }
+
+    m = Money(euri, cents); // dodano: postavlja procitani iznos u objekt m
+    return is;
+}
+
 
 
 int main()
@@ -72,7 +124,7 @@ int main()
 }
 
 /*
-Ocekivani ispis:
+Ocekivani ispis:`
 
     1.05 EUR + 0.95 EUR = 2.00 EUR
     Neispravan zapis: Sok
