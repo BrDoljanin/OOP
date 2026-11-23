@@ -3,8 +3,61 @@
 #include <iostream>
 #include <string>
 #include <vector>
-
+using namespace std;
 // ovdje napisite klasu Inventory
+
+class Inventory
+{
+
+    vector<string> ime;
+    size_t max;
+
+public:
+    Inventory(size_t kap = 0) : max(kap) 
+    {
+    
+        ime.reserve(max);
+    
+    }
+    Inventory& operator +=(const string& item)
+    {
+    
+        if(ime.size() < max)
+        {
+            
+            ime.push_back(item);
+        
+        }
+        return *this;
+    }
+    string& operator[](size_t i)
+    {
+        
+        return ime[i];
+    
+    }
+
+    const string& operator[](size_t i) const
+    {
+
+        return ime[i];
+
+    }
+       
+    size_t size() const
+    {
+    
+        return ime.size();
+        
+    }
+    explicit operator bool() const
+    {
+    
+        return !ime.empty();
+
+    }
+};
+
 
 void show(const Inventory& inv)
 {
