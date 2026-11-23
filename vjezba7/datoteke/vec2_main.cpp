@@ -1,14 +1,73 @@
 // Vjezba 7, zadatak 1: napisite strukturu Vec2 i operatore iznad main.
 
-#include <iostream>
 
-// ovdje napisite Vec2 i operatore
+#include <iostream>
+using namespace std;
+
+struct Vec2
+{
+    int x;
+    int y;
+
+    Vec2& operator+=(const Vec2& v)
+    {
+        x += v.x;
+        y += v.y;
+        return *this;
+    }
+
+    Vec2& operator-=(const Vec2& v)
+    {
+        x -= v.x;
+        y -= v.y;
+        return *this;
+    }
+};
+
+Vec2 operator+(Vec2 a, const Vec2& b)
+{
+    a += b;
+    return a;
+}
+
+Vec2 operator-(Vec2 a, const Vec2& b)
+{
+    a -= b;
+    return a;
+}
+
+Vec2 operator*(Vec2 v, int puta)
+{
+    v.x *= puta;
+    v.y *= puta;
+    return v;
+}
+
+Vec2 operator*(int scalar, Vec2 v)
+{
+    return v * scalar;
+}
+
+bool operator==(const Vec2& a, const Vec2& b)
+{
+    return a.x == b.x && a.y == b.y;
+}
+
+bool operator!=(const Vec2& a, const Vec2& b)
+{
+    return !(a == b);
+}
+
+ostream& operator<<(ostream& os, const Vec2& v)
+{
+    return os << '(' << v.x << ", " << v.y << ')';
+}
 
 int main()
 {
-    Vec2 player{2, 3};
-    Vec2 right{1, 0};
-    Vec2 down{0, 1};
+    Vec2 player{ 2, 3 };
+    Vec2 right{ 1, 0 };
+    Vec2 down{ 0, 1 };
 
     player += right;
     std::cout << player << '\n';
@@ -17,11 +76,12 @@ int main()
     Vec2 target = player + right * 3 - down;
     std::cout << target << '\n';
 
-    Vec2 enemy{6, 4};
+    Vec2 enemy{ 6, 4 };
     std::cout << (target == enemy) << ' ' << (player != enemy) << '\n';
     std::cout << player << " -> " << target << '\n';
     return 0;
 }
+
 
 /*
 Ocekivani ispis:
